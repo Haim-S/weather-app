@@ -3,14 +3,14 @@ import { searchLocation } from './data/service.data';
 
 
 function App() {
-const [data, setData] = useState({});
+const [data, setData] = useState(null);
 // const [location, setLocation] = useState('');
 const locationRef = useRef(null);
 
 const searchInput = ()=> {
-    searchLocation(locationRef.current.value).then((res)=> {
-      setData(res);
-    });
+    searchLocation(locationRef.current.value).then(responseData => {
+      setData(responseData)
+    })
     locationRef.current.value= '';
   }
   console.log(data);
@@ -42,30 +42,34 @@ const searchInput = ()=> {
       <div className='container'>
         <div className='top'>
           <div className='location'>
-            <p>Dallas</p>
+            <p>{data?.name}</p>
         </div>
         <div className='temp'>
-          <h1>60°F</h1>
+          {/* {data?.main ?  <h1>{data.main.temp}°F</h1> : ""} */}
+          <h1>{data?.main.temp.toFixed()}°F</h1>
         </div>
         <div className='description'>
-          <p>Clouds</p>
+          <p>{data?.weather[0].main}</p>
         </div>
         </div>
       </div>
+{data?.name != undefined &&
         <div className='bottom'>
           <div className='feels'>
-            <p className='bold'>65°F</p>
+            <p className='bold'>{data?.main?.feels_like.toFixed()}°F</p>
             <p>Feels Like</p>
           </div>
           <div className='humidity'>
-            <p className='bold'>20%</p>
+            <p className='bold'>{data?.main.humidity}%</p>
             <p>Humidity</p>
           </div>
           <div className='wind'>
-            <p className='bold'>12 MPH</p>
+            <p className='bold'>{data?.wind.speed.toFixed()} MPH</p>
             <p>Wind Speed</p>
           </div>
         </div>
+}
+
     </div>
   );
 }
